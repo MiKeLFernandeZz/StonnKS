@@ -4,6 +4,7 @@ module Test1 {
 	requires org.joda.time;
 	requires javafx.graphics;
 	requires json;
+	requires javafx.base;
 	opens application to javafx.graphics, javafx.fxml;
 	opens Controlador to javafx.fxml;
 }

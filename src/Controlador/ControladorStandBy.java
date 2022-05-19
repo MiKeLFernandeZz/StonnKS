@@ -1,15 +1,21 @@
 package Controlador;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 import Modelo.FechaYHora;
 import Modelo.Tiempo;
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
@@ -44,6 +50,8 @@ public class ControladorStandBy{
     @FXML private Label Temp_Sem_5;
     @FXML private Label Temp_Sem_6;
     @FXML private Label Temp_Sem_7;
+    @FXML private AnchorPane Parent;
+    @FXML private AnchorPane Container;
     
     FechaYHora dt;
     Timeline timer;
@@ -68,6 +76,23 @@ public class ControladorStandBy{
 			timer.play();
 		}
 	}
+    
+    @FXML private void CambiarScena() throws IOException {
+    	Parent root = FXMLLoader.load(getClass().getResource("/scene/Identificacion.fxml"));
+    	Scene scene = Parent.getScene();
+    	root.translateYProperty().set(-scene.getHeight());
+    	
+    	Parent.getChildren().add(root);
+    	
+    	Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
+        KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished(t -> {
+            Parent.getChildren().remove(Container);
+        });
+        timeline.play();
+    }
     
     private void establecerFechaYHora() {
     	dt = new FechaYHora();

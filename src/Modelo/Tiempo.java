@@ -95,12 +95,12 @@ public class Tiempo {
 	public double getTemperaturaMinima(int dia) {
 		JSONObject daily = WeakData.getJSONArray("daily").getJSONObject(dia);
 		JSONObject temp = daily.getJSONObject("temp");
-		return ((Double) temp.get("min")) - 273.15;
+		return Double.valueOf(temp.get("min").toString()) - 273.15;
 	}
 	
 	public double getTemperaturaMaxima(int dia) {
 		JSONObject daily = WeakData.getJSONArray("daily").getJSONObject(dia);
 		JSONObject temp = daily.getJSONObject("temp");
-		return ((Double) temp.get("max")) - 273.15;
+		return Double.valueOf(temp.get("max").toString()) - 273.15;
 	}
 }
