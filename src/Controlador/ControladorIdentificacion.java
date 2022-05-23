@@ -47,7 +47,7 @@ public class ControladorIdentificacion {
     @FXML private void CambiarScena() throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource("/scene/StandBy.fxml"));
     	Scene scene = Parent.getScene();
-    	root.translateYProperty().set(scene.getHeight());
+    	root.translateYProperty().set(-scene.getHeight());
     	
     	Parent.getChildren().add(root);
     	
@@ -57,6 +57,7 @@ public class ControladorIdentificacion {
         timeline.getKeyFrames().add(kf);
         timeline.setOnFinished(t -> {
             Parent.getChildren().remove(Container);
+            timeline.stop();
         });
         timeline.play();
     }
