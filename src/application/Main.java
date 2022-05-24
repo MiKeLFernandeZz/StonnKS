@@ -17,10 +17,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("/scene/Standby.fxml"));
 			StandBy = new Scene(root);
 			StandBy.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-//			root = FXMLLoader.load(getClass().getResource("/scene/Identificacion.fxml"));
-//			Identificacion = new Scene(root);
-//			Identificacion.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-	        primaryStage.setScene(StandBy);
+			primaryStage.setScene(StandBy);
 	        primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

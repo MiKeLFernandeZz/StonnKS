@@ -48,8 +48,16 @@
                      </children>
                   </VBox>
                   <AnchorPane prefHeight="286.0" prefWidth="640.0" style="-fx-background-color: #4449a5; -fx-background-radius: 35;" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="475.0" />
-                  <VBox prefHeight="195.0" prefWidth="462.0" AnchorPane.bottomAnchor="38.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="567.0">
+                  <VBox layoutY="504.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="258.0" prefWidth="462.0" AnchorPane.bottomAnchor="38.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="504.0">
                      <children>
+                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseExited="#Enfocar" onMousePressed="#Desenfocar" onMouseReleased="#Enfocar" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #f28005;" text="Cambiar actividad">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Consolas" size="36.0" />
+                           </font>
+                        </Button>
                         <Button mnemonicParsing="false" onMouseClicked="#CambiarScena" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #04b1d9;" text="Descanso">
                            <VBox.margin>
                               <Insets top="20.0" />
@@ -58,13 +66,13 @@
                               <Font name="Consolas" size="36.0" />
                            </font>
                         </Button>
-                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseExited="#Enfocar" onMousePressed="#Desenfocar" onMouseReleased="#Enfocar" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #30ca91;" text="Iniciar Jornada">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
+                        <Button layoutX="10.0" layoutY="125.0" mnemonicParsing="false" onMouseExited="#Enfocar" onMousePressed="#Desenfocar" onMouseReleased="#Enfocar" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #30ca91;" text="Iniciar Jornada">
                            <font>
                               <Font name="Consolas" size="36.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </Button>
                      </children>
                   </VBox>
