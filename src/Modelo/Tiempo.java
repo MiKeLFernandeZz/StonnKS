@@ -18,10 +18,15 @@ public class Tiempo {
 	
 	JSONObject ActualData;
 	JSONObject WeakData;
+	String file;
 
 	public Tiempo() {
 		actualizarActualData();
 		actualizarSemanalData();
+		if(System.getProperty("os.name").startsWith("Windows"))
+			file = "file:\\";
+		else
+			file = "file://";
 	}
 	
 	public void actualizarActualData() {
@@ -64,21 +69,21 @@ public class Tiempo {
 	
 	public ImageView getClimaImagen(int code) {
 		if (code <= 232)
-			return new ImageView(new File("icons/Thunderstorm.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Thunderstorm.png").getAbsolutePath());
 		else if(code <= 321)
-			return new ImageView(new File("icons/Drizzle.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Drizzle.png").getAbsolutePath());
 		else if(code <= 531)
-			return new ImageView(new File("icons/Rain.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Rain.png").getAbsolutePath());
 		else if(code <= 622)
-			return new ImageView(new File("icons/Snow.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Snow.png").getAbsolutePath());
 		else if(code <= 781)
-			return new ImageView(new File("icons/Cloudy.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Cloudy.png").getAbsolutePath());
 		else if(code <= 800)
-			return new ImageView(new File("icons/Sunny.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Sunny.png").getAbsolutePath());
 		else if(code <= 802)
-			return new ImageView(new File("icons/Partly-cloudy.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Partly-cloudy.png").getAbsolutePath());
 		else if(code <= 804)
-			return new ImageView(new File("icons/Cloudy.png").getAbsolutePath());
+			return new ImageView(file + new File("icons/Cloudy.png").getAbsolutePath());
 		return null;
 	}
 	

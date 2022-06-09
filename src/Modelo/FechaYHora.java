@@ -16,8 +16,19 @@ public class FechaYHora{
 			+ "/" + dt.getYearOfEra();
     }
     
+    public String getFechaBase() {
+    	DateTime dt = new DateTime();
+    	return (dt.getYearOfEra() + "-" + ((dt.getMonthOfYear() < 10) ? "0" + dt.getMonthOfYear() : dt.getMonthOfYear())
+			+ "-" + ((dt.getDayOfMonth() < 10) ? "0" + dt.getDayOfMonth() : dt.getDayOfMonth()));
+    }
+    
     public String getHora() {
     	return(dt.getHourOfDay() < 10 ? "0" + dt.getHourOfDay() : Integer.toString(dt.getHourOfDay()));
+    }
+    
+    public String getHoraBase() {
+    	DateTime dt = new DateTime();
+    	return dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute();
     }
     
     public String getMinuto() {

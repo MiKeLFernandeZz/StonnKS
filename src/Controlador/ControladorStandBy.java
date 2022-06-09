@@ -1,16 +1,18 @@
 package Controlador;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
 import Modelo.FechaYHora;
 import Modelo.Tiempo;
+import application.Main;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
-public class ControladorStandBy{
+public class ControladorStandBy implements PropertyChangeListener{
 
     @FXML private Label Dia_Sem_1;
     @FXML private Label Dia_Sem_2;
@@ -61,6 +63,7 @@ public class ControladorStandBy{
     
     @FXML public void initialize() {
 		System.out.println("Application started");
+		ControladorSerial.addPropertyChangeListener(this);
 		tiempo = new Tiempo();
 		establecerFechaYHora();
 		establecerTiempo();
@@ -78,7 +81,7 @@ public class ControladorStandBy{
 	}
     
     @FXML private void CambiarScena() throws IOException {
-    	Parent root = FXMLLoader.load(getClass().getResource("/scene/Identificacion.fxml"));
+    	Parent root = FXMLLoader.load(getClass().getResource("/application/Identificacion.fxml"));
     	Scene scene = Parent.getScene();
     	root.translateYProperty().set(scene.getHeight());
     	
@@ -101,11 +104,6 @@ public class ControladorStandBy{
     	LB_Hora.setText(dt.getHora());
 		LB_Min.setText(dt.getMinuto());
 		establecerDias();
-    }
-    
-    private void establecerHora() {
-    	LB_Hora.setText(dt.getHora());
-		LB_Min.setText(dt.getMinuto());
     }
     
     private void establecerDias() {
@@ -162,4 +160,13 @@ public class ControladorStandBy{
     	Icon_Sem_6.setImage(tiempo.getClimaImagen(tiempo.getClimaSemanal(6)).getImage());
     	Icon_Sem_7.setImage(tiempo.getClimaImagen(tiempo.getClimaSemanal(7)).getImage());
     }
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+		// TODO QUERY que devuelva el UsuarioID y de paso cambiarlo en el main
+		String nfc_ID = (String) evt.getNewValue();
+		int TrabajadorID = ControladorBaseDatos.getOutput().sacarTrabajadorPorNFCID(nfc_ID);
+		Main.setTrabajadorID(TrabajadorID);
+	}
 }

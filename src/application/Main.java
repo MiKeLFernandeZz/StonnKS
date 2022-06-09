@@ -1,5 +1,7 @@
 package application;
 	
+import Controlador.ControladorBaseDatos;
+import Controlador.ControladorSerial;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,28 +10,42 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-	Scene StandBy;
-	Scene Identificacion;
+	Scene scene;
+	ControladorSerial controladorSerial;
+	ControladorBaseDatos controladorBaseDatos;
+	static int trabajadorID = 2;
+	static int actividadID = 13;
 	
+	public static int getActividadID() {
+		return actividadID;
+	}
+
+	public static void setActividadID(int actividadID) {
+		Main.actividadID = actividadID;
+	}
+
+	public static int getTrabajadorID() {
+		return trabajadorID;
+	}
+
+	public static void setTrabajadorID(int usuarioID) {
+		Main.trabajadorID = usuarioID;
+	}
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/scene/Standby.fxml"));
-			StandBy = new Scene(root);
-			StandBy.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(StandBy);
+			controladorSerial = new ControladorSerial();
+			controladorBaseDatos = new ControladorBaseDatos();
+			Parent root = FXMLLoader.load(getClass().getResource("StandBy.fxml"));
+			scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.setFullScreen(true);
 	        primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public Scene getStandBy() {
-		return StandBy;
-	}
-
-	public Scene getIdentificacion() {
-		return Identificacion;
 	}
 
 	public static void main(String[] args) {

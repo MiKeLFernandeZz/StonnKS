@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="Parent" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #1b255a;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorDescanso">
+	<children>
+      <AnchorPane fx:id="Container" layoutX="207.0" layoutY="95.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="50.0" layoutY="42.0" prefHeight="90.0" prefWidth="893.0" text="Selecciona el tipo de descanso:" textFill="WHITE">
+               <font>
+                  <Font name="Consolas" size="50.0" />
+               </font>
+            </Label>
+            <ListView fx:id="lista" layoutX="81.0" layoutY="151.0" prefHeight="428.0" prefWidth="1122.0" style="-fx-background-color: #4449a5; -fx-background-radius: 35; -fx-padding: 12;" />
+            <Button fx:id="btn_IniciarDescanso" layoutX="748.0" layoutY="621.0" mnemonicParsing="false" onMouseClicked="#iniciarDescanso" prefHeight="127.0" prefWidth="409.0" style="-fx-background-radius: 35; -fx-background-color: #04b1d9;" text="Iniciar Descanso">
+               <font>
+                  <Font name="Consolas" size="35.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

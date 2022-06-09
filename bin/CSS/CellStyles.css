@@ -1,0 +1,25 @@
+.list-view .list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
+}
+
+.list-view .list-cell:even {
+	-fx-background-color:  #4449a5;
+	-fx-text-fill: black;
+	-fx-background-radius: 35;
+}
+
+.list-view .list-cell:odd {
+	-fx-background-color:  #4449c5;
+	-fx-text-fill: black;
+	-fx-background-radius: 35;
+}
+
+.list-cell{
+    -fx-font:20pt "Consolas";
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0.0%, #207BCF 25.0%, #1973C9 75.0%, #0A65BF 100.0%);
+    -fx-text-fill: white;
+}

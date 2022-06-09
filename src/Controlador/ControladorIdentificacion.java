@@ -1,7 +1,12 @@
 package Controlador;
 
+import java.io.File;
 import java.io.IOException;
 
+import Modelo.FechaYHora;
+import Modelo.FuncionesAplicacion.TipoDescanso;
+import Modelo.Tiempo;
+import application.Main;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -12,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -29,8 +36,16 @@ public class ControladorIdentificacion {
     @FXML private Rectangle Dialog;
     @FXML private Rectangle Dark;
     @FXML private AnchorPane Container;
+    @FXML private Button actividad;
+    @FXML private Button descanso;
+    @FXML private Button jornada;
+    @FXML private Label lbl_Actividad;
+    @FXML private Label lbl_Diario;
+    @FXML private Label lbl_Semanal;
+    
     boolean barra = true;
-    //boolean 
+    String file;
+    Estado estado;
     
     GaussianBlur blur = new GaussianBlur(0);
     Timeline timer;
@@ -38,14 +53,42 @@ public class ControladorIdentificacion {
     Timeline disapear;
     
     @FXML public void initialize() {
-    	setIcono(new Image("file:C:\\Users\\Mikel\\Desktop\\TLPBL4/Andoni.jpeg", 295, 280, false, false));
-    	setDialog(new Image("file:C:\\Users\\Mikel\\Desktop\\TLPBL4/Check.jpg", 295, 280, false, false));
+    	if(System.getProperty("os.name").startsWith("Windows"))
+			file = "file:\\";
+		else
+			file = "file://";
+    	//TODO cambiar los datos con QUERYS
+    	establecerBotones();
+    	establecerDatos();
+    	setIcono(new Image(file + new File("icons/Andoni.jpeg").getAbsolutePath(), 295, 280, false, false));
+    	setDialog(new Image(file + new File("icons/Check.jpg").getAbsolutePath(), 295, 280, false, false));
     	Panel.setEffect(blur);
-    	Panel.setEffect(blur);
+    	//ComprobarEstado
     }
     
-    @FXML private void CambiarScena() throws IOException {
-    	Parent root = FXMLLoader.load(getClass().getResource("/scene/StandBy.fxml"));
+    private void establecerDatos() {
+    	//TODO cambiar todo esto
+		lbl_Actividad.setText("Actividad: " + 
+			ControladorBaseDatos.getOutput().sacarUltimaActividadDelParte(
+			ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())));
+//		lbl_Diario.setText("Horas trabajadas hoy" + 
+//			ControladorBaseDatos.get);
+		
+	}
+
+	@FXML private void cambiarEscenaActividad() throws IOException{
+    	cambiarEscena("/application/Actividad.fxml");
+    }
+	
+	@FXML private void descanso() {
+		if (descanso.getText().equals("Iniciar Descanso")) {
+			FechaYHora dt = new FechaYHora();
+			ControladorBaseDatos.getAplicacion().iniciarDescanso(Main.getTrabajadorID(), dt.getHoraBase(), TipoDescanso.ALMUERZO);
+		}
+	}
+    
+    private void cambiarEscena(String s) throws IOException {
+    	Parent root = FXMLLoader.load(getClass().getResource(s));
     	Scene scene = Parent.getScene();
     	root.translateYProperty().set(-scene.getHeight());
     	
@@ -62,6 +105,43 @@ public class ControladorIdentificacion {
         timeline.play();
     }
     
+    @FXML private void iniciarJornada() {
+    	estado = Estado.JORNADAINICIADA;
+    	FechaYHora dt = new FechaYHora();
+    	establecerBotones();
+    	ControladorBaseDatos.getAplicacion().iniciarJornada(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase(), Main.getActividadID());
+    }
+    
+    @FXML private void finalizarJornada() {
+    	estado = Estado.JORNADASININICIAR;
+    	establecerBotones();
+    	FechaYHora dt = new FechaYHora();
+    	ControladorBaseDatos.getAplicacion().finalizarJornada(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase());
+    }
+    
+    private void establecerBotones() {
+    	switch(estado) {
+    	case JORNADASININICIAR:{
+    		descanso.setDisable(true);
+    		jornada.setText("Iniciar Jornada");
+    		descanso.setVisible(false);
+    		descanso.setText("Iniciar Descanso");
+    	}break;
+    	case JORNADAINICIADA:{
+    		descanso.setDisable(false);
+    		jornada.setText("Finalizar Jornada");
+    		descanso.setVisible(true);
+    		descanso.setText("Iniciar Descanso");
+    	}break;
+    	case DESCANSO:{
+    		descanso.setDisable(false);
+    		jornada.setText("Finalizar Jornada");
+    		jornada.setVisible(true);
+    		descanso.setText("Finalizar Descanso");
+    	}break;
+    	}
+    }
+    
     private void setIcono(Image imagen) {
     	ImagePattern pattern = new ImagePattern(imagen);
         Icono.setFill(pattern);
@@ -72,12 +152,12 @@ public class ControladorIdentificacion {
         Dialog.setFill(pattern);
     }
     
-    @FXML private void Enfocar() {
+    @FXML private void enfocar() {
     	if(timer != null) {
 	    	timer.stop();
-	    	timer = new Timeline(new KeyFrame(Duration.millis(10), e->{
+	    	timer = new Timeline(new KeyFrame(Duration.millis(30), e->{
 	    		if(blur.getRadius() > 0) {
-	    			blur.setRadius(blur.getRadius() - 0.2);
+	    			blur.setRadius(blur.getRadius() - 0.6);
 	    			Panel.setEffect(blur);
 	    			if(blur.getRadius()>0 && barra == true)
 	    				Progresion.setProgress(blur.getRadius()/15);
@@ -96,13 +176,13 @@ public class ControladorIdentificacion {
     	}
     }
     
-    @FXML private void Desenfocar() {
+    @FXML private void desenfocar() {
     	if(timer != null) {
     		timer.stop();
     	}
-    	timer = new Timeline(new KeyFrame(Duration.millis(10), e->{
+    	timer = new Timeline(new KeyFrame(Duration.millis(30), e->{
 			if(blur.getRadius() < 15) {
-				blur.setRadius(blur.getRadius() + 0.08);
+				blur.setRadius(blur.getRadius() + 0.24);
 				Panel.setEffect(blur);
 				Progresion.setVisible(true);
 				Progresion.setProgress(blur.getRadius()/15);
@@ -111,6 +191,11 @@ public class ControladorIdentificacion {
 				Progresion.setVisible(false);
 				timer.stop();
 				timer.getKeyFrames().clear();
+				//TODO esta mierda esta un poco xd
+				if(jornada.getText().equals("Iniciar Jornada"))
+					iniciarJornada();
+				else
+					finalizarJornada();
 				if(apear == null) {
 					crearDialogo();
 				}
@@ -121,10 +206,10 @@ public class ControladorIdentificacion {
 	}
     
     private void crearDialogo() {
-    	apear = new Timeline(new KeyFrame(Duration.millis(15), e->{
+    	apear = new Timeline(new KeyFrame(Duration.millis(30), e->{
     		if(Dialog.getOpacity() < 0.75) {
-    			Dialog.setOpacity(Dialog.getOpacity() + 0.015);
-    			Dark.setOpacity(Dark.getOpacity() + 0.007);
+    			Dialog.setOpacity(Dialog.getOpacity() + 0.03);
+    			Dark.setOpacity(Dark.getOpacity() + 0.014);
     		}
     		else {
     			System.out.println("Saliendo");
@@ -140,10 +225,10 @@ public class ControladorIdentificacion {
     }
     
     private void ocultarDialog() {
-		disapear = new Timeline(new KeyFrame(Duration.millis(10), y->{
+		disapear = new Timeline(new KeyFrame(Duration.millis(30), y->{
     		if(Dialog.getOpacity() >= 0) {
-    			Dialog.setOpacity(Dialog.getOpacity() - 0.02);
-    			Dark.setOpacity(Dark.getOpacity() - 0.01);
+    			Dialog.setOpacity(Dialog.getOpacity() - 0.06);
+    			Dark.setOpacity(Dark.getOpacity() - 0.03);
     		}
     		else {
     			Dark.setOpacity(0);
@@ -168,6 +253,11 @@ public class ControladorIdentificacion {
         sleeper.setOnSucceeded(event -> continuation.run());
         new Thread(sleeper).start();
       }
-
+    
+    public enum Estado{
+    	JORNADASININICIAR,
+    	JORNADAINICIADA,
+    	DESCANSO
+    }
 }
 

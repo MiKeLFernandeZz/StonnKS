@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="Parent" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #232323, #363636);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorIdentificacion">
+   <children>
+      <AnchorPane fx:id="Container" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane fx:id="Panel" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1b255a;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <AnchorPane prefHeight="55.0" prefWidth="1172.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
+                     <children>
+                        <Label layoutX="39.0" layoutY="19.0" text="Mondragon Unibertsitatea" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Consolas Italic" size="65.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <VBox prefHeight="208.0" prefWidth="843.0" style="-fx-background-color: #4449a5; -fx-background-radius: 35;" AnchorPane.leftAnchor="372.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="170.0">
+                     <children>
+                        <Label prefHeight="65.0" prefWidth="782.0" text="Andoni Martí" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Consolas" size="45.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Label>
+                        <Label prefHeight="74.0" prefWidth="782.0" text="Puto Genio" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Consolas" size="35.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <AnchorPane prefHeight="286.0" prefWidth="640.0" style="-fx-background-color: #4449a5; -fx-background-radius: 35;" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="475.0">
+                     <children>
+                        <Label fx:id="lbl_Actividad" layoutX="32.0" layoutY="36.0" prefHeight="51.0" prefWidth="575.0" text="Actividad: No se xd" textFill="WHITE">
+                           <font>
+                              <Font name="Consolas" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbl_Diario" layoutX="32.0" layoutY="120.0" prefHeight="51.0" prefWidth="575.0" text="Horas trabajadas hoy: -4h" textFill="WHITE">
+                           <font>
+                              <Font name="Consolas" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbl_Semanal" layoutX="32.0" layoutY="199.0" prefHeight="51.0" prefWidth="575.0" text="Horas trabajadas semanales: -36h" textFill="WHITE">
+                           <font>
+                              <Font name="Consolas" size="30.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
+                  <VBox layoutY="504.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="258.0" prefWidth="462.0" AnchorPane.bottomAnchor="38.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="504.0">
+                     <children>
+                        <Button fx:id="descanso" mnemonicParsing="false" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #04b1d9;" text="Descanso">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Consolas" size="36.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="actividad" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#cambiarEscenaActividad" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #f28005;" text="Cambiar actividad">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Consolas" size="36.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="jornada" layoutX="10.0" layoutY="125.0" mnemonicParsing="false" onMouseExited="#enfocar" onMousePressed="#desenfocar" onMouseReleased="#enfocar" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #30ca91;" text="Iniciar Jornada">
+                           <font>
+                              <Font name="Consolas" size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <Rectangle fx:id="Icono" arcHeight="35.0" arcWidth="35.0" fill="DODGERBLUE" height="280.0" stroke="BLACK" strokeType="INSIDE" width="295.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="170.0" />
+               </children>
+            </AnchorPane>
+            <Rectangle fx:id="Dialog" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="250.0" opacity="0.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 35; -fx-arc-width: 35; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0, 0, 0);" width="250.0" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="275.0" />
+            <Rectangle fx:id="Dark" arcHeight="5.0" arcWidth="5.0" disable="true" height="800.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ProgressBar fx:id="Progresion" prefHeight="20.0" prefWidth="407.0" progress="0.0" visible="false" AnchorPane.leftAnchor="463.0" AnchorPane.topAnchor="439.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
