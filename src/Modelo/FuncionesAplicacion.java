@@ -1,5 +1,11 @@
 package Modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Minutes;
 
 public class FuncionesAplicacion {
 
@@ -98,6 +104,76 @@ public class FuncionesAplicacion {
 		inyect.cerrarJornada(JornadaID, FechaSalida, HoraSalida);
 		
 	}
+	
+	 public int sacarHorasDeUnaJornada(int TrabajadorID, String fecha, String hora) {
+        int JornadaID, t_jornada=0, t_descanso=0;
+        DateTime aux = new DateTime();
+        DateTime fin;
+        DateTime inicio;
+        String horaInicio[];
+        String horaFin[];
+        Duration diferencia;
+        
+        //SACAR TIEMPO TRABAJADO
+        System.out.println(fecha);
+        JornadaID=output.buscarJornadaPorTrabajadorIDyFecha(TrabajadorID, fecha);
+        System.out.println(JornadaID);
+        if(JornadaID==0) return 0;
+        System.out.println("uwu");
+        String cierreJ=output.sacarCierreJornada(JornadaID);
+        System.out.println(cierreJ);
+        String comienzoJ=output.sacarComienzoJornada(JornadaID);//"hh:mm:ss"
+        System.out.println(comienzoJ);
+        
+        horaInicio = comienzoJ.split(":");
+        inicio = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
+			aux.getDayOfMonth(), Integer.valueOf(horaInicio[0]),
+			Integer.valueOf(horaInicio[1]), Integer.valueOf(horaInicio[2]));
+        
+        if(cierreJ==null) {//La jornada sigue activa xd
+        	fin = new DateTime();
+        }
+        else { // La jornada ha chapado
+	        horaFin = comienzoJ.split(":");
+	    	fin = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
+				aux.getDayOfMonth(), Integer.valueOf(horaFin[0]),
+				Integer.valueOf(horaFin[1]), Integer.valueOf(horaFin[2]));
+        }
+        
+        diferencia = new Duration(inicio, fin);
+    	t_jornada+=diferencia.getStandardMinutes();
+    	
+        //SACAR TIEMPO DESCANSADO
+        List<Integer> descansos=new ArrayList<>();
+        String cierreD;
+        String comienzoD;
+        
+        descansos=output.sacarDescansosDeUnaJornada(JornadaID);
+        for (Integer descansoID : descansos) {
+            cierreD=output.sacarCierreDescanso(descansoID);
+            comienzoD=output.sacarComienzoDescanso(descansoID);
+            
+            horaInicio = comienzoD.split(":");
+            inicio = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
+    			aux.getDayOfMonth(), Integer.valueOf(horaInicio[0]),
+    			Integer.valueOf(horaInicio[1]), Integer.valueOf(horaInicio[2]));
+            
+            
+            
+            if(cierreD==null){ //restar comienzoD y fecha.concat(" ").concat(hora)
+            	fin = new DateTime();
+            }else { 		   //restar comienzoD y cierreD
+            	horaFin = cierreD.split(":");
+                fin = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
+    				aux.getDayOfMonth(), Integer.valueOf(horaFin[0]),
+    				Integer.valueOf(horaFin[1]), Integer.valueOf(horaFin[2]));
+            }
+            diferencia = new Duration(inicio, fin);
+            t_descanso += diferencia.getStandardMinutes();
+        }
+        
+        return t_jornada-t_descanso;
+    }
 	
 	public enum TipoDescanso{
 		ALMUERZO,

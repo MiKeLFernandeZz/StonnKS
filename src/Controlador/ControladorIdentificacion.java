@@ -58,6 +58,7 @@ public class ControladorIdentificacion {
 		else
 			file = "file://";
     	//TODO cambiar los datos con QUERYS
+    	establecerEstado();
     	establecerBotones();
     	establecerDatos();
     	setIcono(new Image(file + new File("icons/Andoni.jpeg").getAbsolutePath(), 295, 280, false, false));
@@ -66,13 +67,33 @@ public class ControladorIdentificacion {
     	//ComprobarEstado
     }
     
-    private void establecerDatos() {
+    private void establecerEstado() {
+		// TODO Auto-generated method stub
+		if(ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())!= 0) {
+			if(ControladorBaseDatos.getOutput().sacarDescansoAbiertoPorJornadaID(
+					ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())) != 0) {
+				estado = Estado.DESCANSO;
+			}else {
+				estado = Estado.JORNADAINICIADA;
+			}
+		}else {
+			estado = Estado.JORNADASININICIAR;
+		}
+	}
+
+	private void establecerDatos() {
     	//TODO cambiar todo esto
+		System.out.println("CambiandoInfo");
+		FechaYHora dt = new FechaYHora();
 		lbl_Actividad.setText("Actividad: " + 
 			ControladorBaseDatos.getOutput().sacarUltimaActividadDelParte(
 			ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())));
-//		lbl_Diario.setText("Horas trabajadas hoy" + 
-//			ControladorBaseDatos.get);
+		
+		lbl_Diario.setText("Horas tabajadas hoy: " + ControladorBaseDatos.getAplicacion()
+			.sacarHorasDeUnaJornada(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase()) / 60
+			+ "h " + ControladorBaseDatos.getAplicacion()
+			.sacarHorasDeUnaJornada(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase()) %60
+			+ "min");
 		
 	}
 

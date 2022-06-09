@@ -254,6 +254,165 @@ public class FuncionesOutput {
 		return actividades;
 	}
 
-	
+	//-------------------------------| PARA PANTALLA DE USUARIO
+		public int buscarJornadaPorTrabajadorIDyFecha(int trabajadorID, String fecha) {
+			try {
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call jornadaPorTrabajadorFecha(\""+trabajadorID+","+fecha+"\")}");
+				
+				ResultSet rs=sentencia.executeQuery();
+				System.out.println("algo");
+				
+				rs.next();
+				return rs.getInt(1);
+			}catch(Exception e) {
+				
+			}
+			return 0;
+		}
+
+		public String sacarCierreJornada(int jornadaID) {
+			try {
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call sacarCierreJornada(\""+jornadaID+"\")}");
+				
+				ResultSet rs=sentencia.executeQuery();
+				
+				rs.next();
+				return rs.getString(1);
+			}catch(Exception e) {
+				
+			}
+			return null;
+		}
+
+		public String sacarComienzoJornada(int jornadaID) {
+			try {
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call sacarComienzoJornada(\""+jornadaID+"\")}");
+				
+				ResultSet rs=sentencia.executeQuery();
+				
+				rs.next();
+				return rs.getString(1);
+			}catch(Exception e) {
+				
+			}
+			return null;
+		}
+
+		public List<Integer> sacarDescansosDeUnaJornada(int jornadaID) {
+			int i=1;
+			List<Integer> descansos = new ArrayList<>();
+			try {
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call sacarDescansosDeUnaJornada(\""+jornadaID+"\")}");
+				
+				ResultSet rs=sentencia.executeQuery();
+				
+				while(rs.next()) {
+					
+					descansos.add(rs.getInt(i));
+					
+				}
+			}catch(Exception e) {
+				System.out.println(e);
+			}
+			return descansos;
+		}
+
+		public String sacarCierreDescanso(Integer descansoID) {
+			try {
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call sacarCierreDescanso(\""+descansoID+"\")}");
+				
+				ResultSet rs=sentencia.executeQuery();
+				
+				rs.next();
+				return rs.getString(1);
+			}catch(Exception e) {
+				
+			}
+			return null;
+		}
+
+		public String sacarComienzoDescanso(Integer descansoID) {
+			try {
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call sacarComienzoDescanso(\""+descansoID+"\")}");
+				
+				ResultSet rs=sentencia.executeQuery();
+				
+				rs.next();
+				return rs.getString(1);
+			}catch(Exception e) {
+				
+			}
+			return null;
+		}
+		
+		public int verDiaDeLaSemana(String data) {
+	        ResultSet rs;
+	        try {
+	            s = con.createStatement();
+	            rs = s.executeQuery ("SELECT DAYOFWEEK(\""+data+"\")");
+	            rs.next();
+	            return rs.getInt (1);
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return 10;
+	    }
+
+	    public String NombrePorTrabajadorID(int trabID) {
+	        try {
+	            CallableStatement sentencia=(CallableStatement) con.prepareCall("{call NombrePorTrabajadorID(\""+trabID+"\")}");
+	            
+	            ResultSet rs=sentencia.executeQuery();
+	            
+	            rs.next();
+	            return rs.getString(1);
+	        }catch(Exception e) {
+	            
+	        }
+	        return null;
+	    }
+
+	    public String ApellidoPorTrabajadorID(int trabID) {
+	        try {
+	            CallableStatement sentencia=(CallableStatement) con.prepareCall("{call ApellidoPorTrabajadorID(\""+trabID+"\")}");
+	            
+	            ResultSet rs=sentencia.executeQuery();
+	            
+	            rs.next();
+	            return rs.getString(1);
+	        }catch(Exception e) {
+	            
+	        }
+	        return null;
+	    }
+
+	    public String NombrePorActividadID(int actID) {
+	        try {
+	            CallableStatement sentencia=(CallableStatement) con.prepareCall("{call NombrePorActividadID(\""+actID+"\")}");
+	            
+	            ResultSet rs=sentencia.executeQuery();
+	            
+	            rs.next();
+	            return rs.getString(1);
+	        }catch(Exception e) {
+	            
+	        }
+	        return null;
+	    }
+
+	    public int ActividadIDPorNombre(String nombre) {
+	        try {
+	            CallableStatement sentencia=(CallableStatement) con.prepareCall("{call ActividadIDPorNombre(\""+nombre+"\")}");
+	            
+	            ResultSet rs=sentencia.executeQuery();
+	            
+	            rs.next();
+	            return rs.getInt(1);
+	        }catch(Exception e) {
+	            
+	        }
+	        return 0;
+	    }
 	
 }

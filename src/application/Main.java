@@ -37,7 +37,7 @@ public class Main extends Application {
 		try {
 			controladorSerial = new ControladorSerial();
 			controladorBaseDatos = new ControladorBaseDatos();
-			Parent root = FXMLLoader.load(getClass().getResource("StandBy.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Identificacion.fxml"));
 			scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
