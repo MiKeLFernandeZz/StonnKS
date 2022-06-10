@@ -49,12 +49,11 @@ public class FuncionesAplicacion {
 		
 	}
 
-	public void finalizarDescanso(String TrabajadorNFC, String HoraFinal) {
+	public void finalizarDescanso(int TrabajadorID, String HoraFinal) {
 
 		//Cerrar Descanso
-		int JornadaID, TrabajadorID, DescansoID;
+		int JornadaID, DescansoID;
 
-		TrabajadorID=output.sacarTrabajadorPorNFCID(TrabajadorNFC);
 		JornadaID=output.buscarJornadaActual(TrabajadorID);
 		
 		DescansoID=output.sacarDescansoAbiertoPorJornadaID(JornadaID);
@@ -112,20 +111,16 @@ public class FuncionesAplicacion {
         DateTime inicio;
         String horaInicio[];
         String horaFin[];
-        Duration diferencia;
         
         //SACAR TIEMPO TRABAJADO
-        System.out.println(fecha);
         JornadaID=output.buscarJornadaPorTrabajadorIDyFecha(TrabajadorID, fecha);
-        System.out.println(JornadaID);
-        if(JornadaID==0) return 0;
-        System.out.println("uwu");
-        String cierreJ=output.sacarCierreJornada(JornadaID);
-        System.out.println(cierreJ);
-        String comienzoJ=output.sacarComienzoJornada(JornadaID);//"hh:mm:ss"
-        System.out.println(comienzoJ);
         
-        horaInicio = comienzoJ.split(":");
+        if(JornadaID==0) return 0;
+        
+        String cierreJ=output.sacarCierreJornada(JornadaID);
+        String comienzoJ=output.sacarComienzoJornada(JornadaID);
+        
+        horaInicio = comienzoJ.substring(11).split(":");
         inicio = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
 			aux.getDayOfMonth(), Integer.valueOf(horaInicio[0]),
 			Integer.valueOf(horaInicio[1]), Integer.valueOf(horaInicio[2]));
@@ -134,14 +129,16 @@ public class FuncionesAplicacion {
         	fin = new DateTime();
         }
         else { // La jornada ha chapado
-	        horaFin = comienzoJ.split(":");
+	        horaFin = cierreJ.substring(11).split(":");
 	    	fin = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
 				aux.getDayOfMonth(), Integer.valueOf(horaFin[0]),
 				Integer.valueOf(horaFin[1]), Integer.valueOf(horaFin[2]));
         }
-        
-        diferencia = new Duration(inicio, fin);
-    	t_jornada+=diferencia.getStandardMinutes();
+    	t_jornada+=Minutes.minutesBetween(inicio, fin).getMinutes();
+    	
+    	
+    	//-------------------------------------------------------//
+    	
     	
         //SACAR TIEMPO DESCANSADO
         List<Integer> descansos=new ArrayList<>();
@@ -152,28 +149,46 @@ public class FuncionesAplicacion {
         for (Integer descansoID : descansos) {
             cierreD=output.sacarCierreDescanso(descansoID);
             comienzoD=output.sacarComienzoDescanso(descansoID);
-            
+            System.out.println(comienzoD);
             horaInicio = comienzoD.split(":");
             inicio = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
     			aux.getDayOfMonth(), Integer.valueOf(horaInicio[0]),
     			Integer.valueOf(horaInicio[1]), Integer.valueOf(horaInicio[2]));
             
-            
-            
-            if(cierreD==null){ //restar comienzoD y fecha.concat(" ").concat(hora)
+            if(cierreD==null){ 
             	fin = new DateTime();
-            }else { 		   //restar comienzoD y cierreD
+            }else { 		   
             	horaFin = cierreD.split(":");
                 fin = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
     				aux.getDayOfMonth(), Integer.valueOf(horaFin[0]),
     				Integer.valueOf(horaFin[1]), Integer.valueOf(horaFin[2]));
             }
-            diferencia = new Duration(inicio, fin);
-            t_descanso += diferencia.getStandardMinutes();
+            t_descanso += Minutes.minutesBetween(inicio, fin).getMinutes();
         }
-        
+        System.out.println("Tiempo jornada: " + t_jornada + "\tTiempo descansos: " + t_descanso);
         return t_jornada-t_descanso;
     }
+	 
+	 public int sacarHorasDeLaSemana(int TrabajadorID, String fecha, String hora) {
+	        int inicio_semana;
+	        int horas_semanales=0;
+	        DateTime fechaActual;
+	        DateTime fechaInicio;
+	        
+	        fechaActual = new DateTime();
+	        //inicio_semana=fecha-(output.verDiaDeLaSemana(fecha)-1);//restar un numero de dias a una fecha para encontrar el inicio de la semana
+	        inicio_semana = output.verDiaDeLaSemana(fecha)-1;
+	        fechaInicio = fechaActual.minusDays(inicio_semana);
+	        horas_semanales+=sacarHorasDeUnaJornada(TrabajadorID, FechaYHora.toFechaBase(fechaInicio), hora);
+	        
+	        do {
+	        	fechaInicio = fechaInicio.plusDays(1);
+	            horas_semanales+=sacarHorasDeUnaJornada(TrabajadorID, FechaYHora.toFechaBase(fechaInicio), hora);
+	            inicio_semana--;
+	        }while(inicio_semana > 0);
+	        
+	        return horas_semanales;
+	    }
 	
 	public enum TipoDescanso{
 		ALMUERZO,

@@ -51,6 +51,7 @@ public class ControladorIdentificacion {
     Timeline timer;
     Timeline apear;
     Timeline disapear;
+    Timeline inactividad;
     
     @FXML public void initialize() {
     	if(System.getProperty("os.name").startsWith("Windows"))
@@ -61,13 +62,29 @@ public class ControladorIdentificacion {
     	establecerEstado();
     	establecerBotones();
     	establecerDatos();
+    	establecerTimer();
     	setIcono(new Image(file + new File("icons/Andoni.jpeg").getAbsolutePath(), 295, 280, false, false));
     	setDialog(new Image(file + new File("icons/Check.jpg").getAbsolutePath(), 295, 280, false, false));
+    	
     	Panel.setEffect(blur);
-    	//ComprobarEstado
     }
     
-    private void establecerEstado() {
+    private void establecerTimer(){
+    	timer = new Timeline(new KeyFrame(Duration.seconds(100), e->{
+    		try {
+				cambiarEscena("/application/StandBy.fxml");
+				timer.stop();
+    			timer.getKeyFrames().clear();
+    			timer = null;
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}));
+    	timer.setCycleCount(Animation.INDEFINITE);
+    	timer.play();
+	}
+
+	private void establecerEstado() {
 		// TODO Auto-generated method stub
 		if(ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())!= 0) {
 			if(ControladorBaseDatos.getOutput().sacarDescansoAbiertoPorJornadaID(
@@ -86,13 +103,20 @@ public class ControladorIdentificacion {
 		System.out.println("CambiandoInfo");
 		FechaYHora dt = new FechaYHora();
 		lbl_Actividad.setText("Actividad: " + 
+			ControladorBaseDatos.getOutput().NombrePorActividadID(
 			ControladorBaseDatos.getOutput().sacarUltimaActividadDelParte(
-			ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())));
+			ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID()))));
 		
 		lbl_Diario.setText("Horas tabajadas hoy: " + ControladorBaseDatos.getAplicacion()
 			.sacarHorasDeUnaJornada(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase()) / 60
 			+ "h " + ControladorBaseDatos.getAplicacion()
 			.sacarHorasDeUnaJornada(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase()) %60
+			+ "min");
+		
+		lbl_Semanal.setText("Horas semanales: " + ControladorBaseDatos.getAplicacion()
+			.sacarHorasDeLaSemana(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase()) / 60
+			+ "h " + ControladorBaseDatos.getAplicacion()
+			.sacarHorasDeLaSemana(Main.getTrabajadorID(), dt.getFechaBase(), dt.getHoraBase()) %60
 			+ "min");
 		
 	}
@@ -101,10 +125,12 @@ public class ControladorIdentificacion {
     	cambiarEscena("/application/Actividad.fxml");
     }
 	
-	@FXML private void descanso() {
+	@FXML private void descanso() throws IOException{
+		FechaYHora dt = new FechaYHora();
 		if (descanso.getText().equals("Iniciar Descanso")) {
-			FechaYHora dt = new FechaYHora();
-			ControladorBaseDatos.getAplicacion().iniciarDescanso(Main.getTrabajadorID(), dt.getHoraBase(), TipoDescanso.ALMUERZO);
+			cambiarEscena("/application/Descanso.fxml");
+		}else {
+			ControladorBaseDatos.getAplicacion().finalizarDescanso(Main.getTrabajadorID(), dt.getHoraBase());
 		}
 	}
     

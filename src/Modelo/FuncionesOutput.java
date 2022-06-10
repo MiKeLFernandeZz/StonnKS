@@ -257,10 +257,9 @@ public class FuncionesOutput {
 	//-------------------------------| PARA PANTALLA DE USUARIO
 		public int buscarJornadaPorTrabajadorIDyFecha(int trabajadorID, String fecha) {
 			try {
-				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call jornadaPorTrabajadorFecha(\""+trabajadorID+","+fecha+"\")}");
+				CallableStatement sentencia=(CallableStatement) con.prepareCall("{call jornadaPorTrabajadorFecha("+trabajadorID+", \""+fecha+"\")}");
 				
 				ResultSet rs=sentencia.executeQuery();
-				System.out.println("algo");
 				
 				rs.next();
 				return rs.getInt(1);

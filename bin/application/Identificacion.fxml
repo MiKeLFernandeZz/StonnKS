@@ -67,7 +67,7 @@
                      </children></AnchorPane>
                   <VBox layoutY="504.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="258.0" prefWidth="462.0" AnchorPane.bottomAnchor="38.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="504.0">
                      <children>
-                        <Button fx:id="descanso" mnemonicParsing="false" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #04b1d9;" text="Descanso">
+                        <Button fx:id="descanso" mnemonicParsing="false" onMouseClicked="#descanso" prefHeight="75.0" prefWidth="462.0" style="-fx-background-radius: 35; -fx-background-color: #04b1d9;" text="Descanso">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>

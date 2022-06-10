@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Modelo.FechaYHora;
 import Modelo.FuncionesAplicacion.TipoDescanso;
+import application.Main;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -59,9 +61,10 @@ public class ControladorDescanso {
     	if(i > 0) {
     		System.out.println(i);
         	String s = listaOpciones.get(i);
-        	System.out.println(s);
-        	//TODO QUERY para iniciar actividad
-        	
+        	FechaYHora dt = new FechaYHora();
+        	ControladorBaseDatos.getAplicacion().iniciarDescanso(
+    			Main.getTrabajadorID(), dt.getHoraBase(),
+    			TipoDescanso.getTipo(s));
         	cambiarEscena("/application/StandBY.fxml");
     	}
     }

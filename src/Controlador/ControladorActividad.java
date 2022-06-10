@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Modelo.FechaYHora;
 import application.Main;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -60,21 +61,18 @@ public class ControladorActividad {
     
     @FXML private void cambiarJornada() throws IOException{
     	System.out.println("Cambiar Jornada");
+    	FechaYHora dt = new FechaYHora();
     	int i = lista.getSelectionModel().getSelectedIndex();
     	if(i > 0) {
-    		System.out.println(i);
         	String s = listaActividades.get(i);
-        	System.out.println(s);
-        	//TODO QUERY para iniciar actividad
         	
-        	//ControladorBaseDatos.getAplicacion().cambiarActividad(, s, i, s);
+        	if(ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())!= 0)// Comprobar que la jornada esta iniciada
+        		ControladorBaseDatos.getAplicacion().cambiarActividad(Main.getTrabajadorID(), dt.getHoraBase(),
+        			ControladorBaseDatos.getOutput().ActividadIDPorNombre(s), null);
+        	Main.setActividadID(ControladorBaseDatos.getOutput().ActividadIDPorNombre(s));
         	
         	cambiarEscena("/application/Identificacion.fxml");
     	}
-    	
-    }
-    
-    private void establecerInfo() {
     	
     }
     

@@ -42,4 +42,9 @@ public class FechaYHora{
     public int getMilisParaMinuto() {
     	return 60000 - dt.getMillisOfSecond() - dt.getSecondOfMinute() * 1000;
     }
+    
+    public static String toFechaBase(DateTime dt) {
+    	return (dt.getYearOfEra() + "-" + ((dt.getMonthOfYear() < 10) ? "0" + dt.getMonthOfYear() : dt.getMonthOfYear())
+			+ "-" + ((dt.getDayOfMonth() < 10) ? "0" + dt.getDayOfMonth() : dt.getDayOfMonth()));
+    }
 }
