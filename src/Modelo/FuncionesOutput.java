@@ -413,5 +413,32 @@ public class FuncionesOutput {
 	        }
 	        return 0;
 	    }
-	
+	    
+	    public String EmpresaDelTrabajadorID(int trabID) {
+	        try {
+	            CallableStatement sentencia=(CallableStatement) con.prepareCall("{call EmpresaDelTrabajadorID(\""+trabID+"\")}");
+	            
+	            ResultSet rs=sentencia.executeQuery();
+	            
+	            rs.next();
+	            return rs.getString(1);
+	        }catch(Exception e) {
+	            
+	        }
+	        return null;
+	    }
+	    
+	    public String PuestoDelTrabajadorID(int trabID) {
+	        try {
+	            CallableStatement sentencia=(CallableStatement) con.prepareCall("{call PuestoDelTrabajadorID(\""+trabID+"\")}");
+	            
+	            ResultSet rs=sentencia.executeQuery();
+	            
+	            rs.next();
+	            return rs.getString(1);
+	        }catch(Exception e) {
+	            
+	        }
+	        return null;
+	    }
 }

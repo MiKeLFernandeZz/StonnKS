@@ -13,6 +13,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,6 +64,8 @@ public class ControladorStandBy implements PropertyChangeListener{
     
     @FXML public void initialize() {
 		System.out.println("Application started");
+		
+		//TODO configurar PropertyChangeListener, luego va a recibir un NFC_ID
 		ControladorSerial.addPropertyChangeListener(this);
 		tiempo = new Tiempo();
 		establecerFechaYHora();
@@ -83,19 +86,26 @@ public class ControladorStandBy implements PropertyChangeListener{
     @FXML private void CambiarScena() throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource("/application/Identificacion.fxml"));
     	Scene scene = Parent.getScene();
-    	root.translateYProperty().set(scene.getHeight());
     	
-    	Parent.getChildren().add(root);
+    	if(Main.isAnimacion()) {
+    		root.translateYProperty().set(scene.getHeight());
+        	
+        	Parent.getChildren().add(root);
+        	
+        	Timeline timeline = new Timeline();
+            KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
+            KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
+            timeline.getKeyFrames().add(kf);
+            timeline.setOnFinished(t -> {
+                Parent.getChildren().remove(Container);
+                timeline.stop();
+            });
+            timeline.play();
+    	}else {
+    		Parent.getChildren().add(root);
+    		Parent.getChildren().remove(Container);
+    	}
     	
-    	Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
-        KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.setOnFinished(t -> {
-            Parent.getChildren().remove(Container);
-            timeline.stop();
-        });
-        timeline.play();
     }
     
     private void establecerFechaYHora() {
@@ -161,12 +171,43 @@ public class ControladorStandBy implements PropertyChangeListener{
     	Icon_Sem_7.setImage(tiempo.getClimaImagen(tiempo.getClimaSemanal(7)).getImage());
     }
 
+    //TODO cuando llega un NFC_ID entra aqui
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		// TODO QUERY que devuelva el UsuarioID y de paso cambiarlo en el main
 		String nfc_ID = (String) evt.getNewValue();
-		int TrabajadorID = ControladorBaseDatos.getOutput().sacarTrabajadorPorNFCID(nfc_ID);
-		Main.setTrabajadorID(TrabajadorID);
+		
+		//Llamada a ControladorBaseDatos para que devuelva Output, a su vez se llama a sacarTrabajadorPorNFCID
+		//que devuelve el TrabajadorID en base al NFC_ID
+		int trabajadorID = ControladorBaseDatos.getOutput().sacarTrabajadorPorNFCID(nfc_ID);
+		
+		Main.setTrabajadorID(trabajadorID);
+		System.out.println(nfc_ID + "\t" + trabajadorID);
+		
+		//Si es mayor que 0 es que el usuario existe
+		if(trabajadorID > 0) {
+			System.out.println("CORRECTO");
+			
+			//Informa a la base de que el trabajador existe, enviando un 1
+			ControladorSerial.enviarInfo((byte) 1);
+			
+			//Esto sin mas, para que se ejecute en el hilo de JavaFX
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						//Cambia de escena, transicion a la pantalla de identificacion (ControladorIdentificacion)
+						CambiarScena();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}});
+		}else {
+			System.out.println("INCORRECTO");
+			
+			//En caso de que el trabajador no exista, se envia a la placa un 0 para decirle 
+			//que no se ha encontrado el trabajador
+			ControladorSerial.enviarInfo((byte) 0);
+		}
 	}
 }

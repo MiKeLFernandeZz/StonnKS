@@ -5,8 +5,10 @@ package Modelo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import application.Main;
+
 public class Conector {
-	public static final String URL = "jdbc:mysql://localhost:3306/StonnKS";
+	public static final String URL = "jdbc:mysql://" + Main.getIP() + ":3306/StonnKS";
     public static final String USER = "adm";
     public static final String CLAVE = "admin1234";
      

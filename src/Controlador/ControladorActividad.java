@@ -37,6 +37,7 @@ public class ControladorActividad {
     	lista.getStylesheets().add(getClass().getResource("/CSS/CellStyles.css").toExternalForm());
     	//lista.setStyle("-fx-control-inner-background:  #4449a5;");
     	listaActividades = new ArrayList<>();
+    	listaActividades = ControladorBaseDatos.getOutput().sacarActividadesPorTrabajadorID(Main.getTrabajadorID());
     	lista.setCellFactory(e -> new ListCell<>() {
     		@Override
             protected void updateItem(String item, boolean empty) {
@@ -51,22 +52,20 @@ public class ControladorActividad {
                 }
             }
     	});
-    	
-    	for(int i = 0; i < 3; i++) {
-    		listaActividades.add("Andoni");
-    		listaActividades.add("Makina");
-    	}
-    	lista.getItems().addAll(ControladorBaseDatos.getOutput().sacarActividadesPorTrabajadorID(Main.getTrabajadorID()));
+    	lista.getItems().addAll(listaActividades);
     }
     
+    //TODO Codigo que se acciona al apretar el boton de cambiar actividad
     @FXML private void cambiarJornada() throws IOException{
     	System.out.println("Cambiar Jornada");
     	FechaYHora dt = new FechaYHora();
     	int i = lista.getSelectionModel().getSelectedIndex();
-    	if(i > 0) {
+    	System.out.println(i);
+    	if(i > -1) {
         	String s = listaActividades.get(i);
-        	
+        	System.out.println(ControladorBaseDatos.getOutput().ActividadIDPorNombre(s));
         	if(ControladorBaseDatos.getOutput().buscarJornadaActual(Main.getTrabajadorID())!= 0)// Comprobar que la jornada esta iniciada
+        		//TODO Cambia la actividad, no pongais los parametros que da paja
         		ControladorBaseDatos.getAplicacion().cambiarActividad(Main.getTrabajadorID(), dt.getHoraBase(),
         			ControladorBaseDatos.getOutput().ActividadIDPorNombre(s), null);
         	Main.setActividadID(ControladorBaseDatos.getOutput().ActividadIDPorNombre(s));
@@ -79,18 +78,25 @@ public class ControladorActividad {
     private void cambiarEscena(String s) throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource(s));
     	Scene scene = Parent.getScene();
-    	root.translateYProperty().set(-scene.getHeight());
     	
-    	Parent.getChildren().add(root);
+    	if(Main.isAnimacion()) {
+    		root.translateYProperty().set(-scene.getHeight());
+        	
+        	Parent.getChildren().add(root);
+        	
+        	Timeline timeline = new Timeline();
+            KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
+            KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
+            timeline.getKeyFrames().add(kf);
+            timeline.setOnFinished(t -> {
+                Parent.getChildren().remove(Container);
+                timeline.stop();
+            });
+            timeline.play();
+    	}else {
+    		Parent.getChildren().add(root);
+    		Parent.getChildren().remove(Container);
+    	}
     	
-    	Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
-        KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.setOnFinished(t -> {
-            Parent.getChildren().remove(Container);
-            timeline.stop();
-        });
-        timeline.play();
     }
 }

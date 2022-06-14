@@ -17,7 +17,7 @@
                <children>
                   <AnchorPane prefHeight="55.0" prefWidth="1172.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
                      <children>
-                        <Label layoutX="39.0" layoutY="19.0" text="Mondragon Unibertsitatea" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Label fx:id="lbl_Empresa" layoutX="39.0" layoutY="19.0" text="Mondragon Unibertsitatea" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
                               <Font name="Consolas Italic" size="65.0" />
                            </font>
@@ -26,18 +26,18 @@
                   </AnchorPane>
                   <VBox prefHeight="208.0" prefWidth="843.0" style="-fx-background-color: #4449a5; -fx-background-radius: 35;" AnchorPane.leftAnchor="372.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="170.0">
                      <children>
-                        <Label prefHeight="65.0" prefWidth="782.0" text="Andoni Martí" textFill="WHITE">
+                        <Label fx:id="lbl_Nombre" prefHeight="65.0" prefWidth="782.0" text="Andoni Martí" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="Consolas" size="45.0" />
+                              <Font name="Consolas" size="40.0" />
                            </font>
                            <padding>
                               <Insets left="20.0" />
                            </padding>
                         </Label>
-                        <Label prefHeight="74.0" prefWidth="782.0" text="Puto Genio" textFill="WHITE">
+                        <Label fx:id="lbl_Puesto" prefHeight="74.0" prefWidth="782.0" text="Puto Genio" textFill="WHITE">
                            <VBox.margin>
                               <Insets left="20.0" />
                            </VBox.margin>

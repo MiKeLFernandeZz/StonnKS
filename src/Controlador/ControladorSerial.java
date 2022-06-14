@@ -14,7 +14,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 public class ControladorSerial implements SerialPortDataListener, ActionListener {
 	static PropertyChangeSupport conectorMain;
 	Scanner teclado;
-	SerialPort comPort;
+	static SerialPort comPort;
 	SerialPortDataListener conector;
 	int datosBuenos[];
 	Object arg0new;
@@ -44,9 +44,12 @@ public class ControladorSerial implements SerialPortDataListener, ActionListener
 		conectorMain.removePropertyChangeListener(listener);
 	}
 
-	public void enviarInfo() {
-		byte[] cadena = {'h','o','l','a'};
-		comPort.writeBytes(cadena, 4, 0);
+	public static void enviarInfo(byte b) {
+		//System.out.println("Sending...\t" + s);
+		byte cadena[] = {b};
+		System.out.println(cadena.length);
+		//comPort.writeBytes(cadena, cadena.length, 0);
+		comPort.writeBytes(cadena, cadena.length);
 	}
 
 	@Override
@@ -64,7 +67,7 @@ public class ControladorSerial implements SerialPortDataListener, ActionListener
 			}
 		}
 		byte[] lectruraBytes = new byte[comPort.bytesAvailable()];
-		comPort.readBytes(lectruraBytes, size);
+		comPort.readBytes(lectruraBytes, comPort.bytesAvailable());
 		String devolver = new String(lectruraBytes, StandardCharsets.UTF_8);
 		return devolver;
 	}
@@ -74,7 +77,7 @@ public class ControladorSerial implements SerialPortDataListener, ActionListener
 		String lectura = leerSerial(16);
 		System.out.println(lectura);
 		conectorMain.firePropertyChange("NFC_ID", null, lectura);
-		//arg0new = arg0;
+		lectura = null;
 	}
 
 	@Override

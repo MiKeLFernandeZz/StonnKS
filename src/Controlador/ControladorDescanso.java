@@ -72,18 +72,25 @@ public class ControladorDescanso {
     private void cambiarEscena(String s) throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource(s));
     	Scene scene = Parent.getScene();
-    	root.translateYProperty().set(-scene.getHeight());
     	
-    	Parent.getChildren().add(root);
+    	if(Main.isAnimacion()) {
+    		root.translateYProperty().set(-scene.getHeight());
+        	
+        	Parent.getChildren().add(root);
+        	
+        	Timeline timeline = new Timeline();
+            KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
+            KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
+            timeline.getKeyFrames().add(kf);
+            timeline.setOnFinished(t -> {
+                Parent.getChildren().remove(Container);
+                timeline.stop();
+            });
+            timeline.play();
+    	}else {
+    		Parent.getChildren().add(root);
+    		Parent.getChildren().remove(Container);
+    	}
     	
-    	Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_BOTH);
-        KeyFrame kf = new KeyFrame(Duration.seconds(0.9), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.setOnFinished(t -> {
-            Parent.getChildren().remove(Container);
-            timeline.stop();
-        });
-        timeline.play();
     }
 }

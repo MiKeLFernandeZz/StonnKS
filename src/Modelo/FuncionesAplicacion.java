@@ -83,10 +83,9 @@ public class FuncionesAplicacion {
 			//Finalizar descanso 
 			inyect.cerrarDescanso(DescansoID, HoraInicio);
 		}
-		else {
-			//Cerrar Ultimo parte de actividad
-			inyect.cerrarParteDeActividad(JornadaID,HoraInicio);
-		}
+		//Cerrar Ultimo parte de actividad
+		inyect.cerrarParteDeActividad(JornadaID,HoraInicio);
+		
 		//Crear nuevo parte de actividad
 		inyect.insertarParteActividad(ActividadID, JornadaID, HoraInicio, null);
 		
@@ -149,7 +148,6 @@ public class FuncionesAplicacion {
         for (Integer descansoID : descansos) {
             cierreD=output.sacarCierreDescanso(descansoID);
             comienzoD=output.sacarComienzoDescanso(descansoID);
-            System.out.println(comienzoD);
             horaInicio = comienzoD.split(":");
             inicio = new DateTime(aux.getYearOfEra(), aux.getMonthOfYear(),
     			aux.getDayOfMonth(), Integer.valueOf(horaInicio[0]),
